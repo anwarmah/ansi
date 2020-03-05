@@ -1,0 +1,33 @@
+---
+#Take the backup of existing tar file
+- name: Backup of the existing tar file
+  copy:
+          src: "{{ direct_path }}/{{ filename }}.jar"
+          dest: "{{ direct_backup_path }}"
+          #  with_items: "{{ jars }}"
+          #  when: item.extension == jar
+
+- name: create a zip archive of existing jar file
+  archive:
+          path: "{{ direct_backup_path }}/{{ filename }}.jar"
+          format: zip
+          remove: yes  
+
+# Download the file from artifactory
+- git:
+        repo: "{{ git_repo }}"
+        dest: "{{ direct_path }}"
+        version: "{{ branch }}"
+  tags:
+        - github
+#- name: All variables defined in the directory group_vars
+#  include_vars: /root/ansible_rbs/group_vars/
+
+#- name: Git clone
+#      command: git clone "{{ git_repo }}" "{{ direct_path }}"
+#      responses:
+#                Username: "{{ git_username }}" # Username is a regex
+#                Password: "{{ git_password }}" # Password is a regex
+#      no_log: true    
+
+          #- name: backup the file   

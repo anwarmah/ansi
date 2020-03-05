@@ -1,0 +1,9 @@
+---
+jars:
+        - extension: jar
+
+
+git_repo: https://github.com/anwarmah/deployment.git
+path: /tmp
+direct_path: /tmp/deployment
+direct_backup_path: /tmp/deployment_backup

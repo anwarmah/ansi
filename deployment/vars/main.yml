@@ -1,0 +1,14 @@
+---
+# vars file for deployment
+#- name: All variables defined in the directory group_vars
+#  include_vars: /root/ansible_rbs/group_vars/ 
+
+jars:
+        - extension: jar
+
+filename: HelloWorld          
+git_repo: git@github.com:anwarmah/deployment.git
+path: /tmp
+direct_path: /tmp/deployment
+direct_backup_path: /tmp/deployment_backup
+branch: master
