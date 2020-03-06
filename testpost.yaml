@@ -32,7 +32,7 @@ vars:
  #       msg: "{{ item.content }}"
  #     with_items: "{{ post_content.results }}"
 
-   - local_action: "copy content='{{ response_code.stdout }}' dest='{{ filepath }}'"
+   - local_action: "copy content='{{ post_content.status }}' dest='{{ filepath }}'"
 
   - name: HTTP 200 status
     find:
