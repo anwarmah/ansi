@@ -8,12 +8,12 @@
   tasks:
    - name: check the status code
      uri:
-       url: https://google.com
+       url: "http://dummy.restapiexample.com/api/v1/employees"
           method: GET
           return_content: yes
           #status_code: 200
      register: response_code
-   - local_action: "copy content='{{ response_code.stdout }}' dest=/root/status.txt"  
+   - local_action: "copy content='{{ response_code }}' dest=/root/status.txt"  
 
    - name: HTTP 200 status
      find:
