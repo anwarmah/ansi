@@ -4,16 +4,19 @@
   vars:
         pattern1: "200"
         pattern2: "404"
+        admin_user: "admin"
+        admin_password: "password"
 
   tasks:
    - name: check the status code
      uri:
-       url: "http://dummy.restapiexample.com/api/v1/employees"
+          url: "https://test.restapiexample.com/app"
           method: GET
-          return_content: yes
-          status_code: 200
-     register: response_code
-   - local_action: "copy content='{{ response_code }}' dest=/root/status.txt"  
+          user: "{{ admin_user }}"
+          password: "{{ admin_password }}"
+          status_code: 200,404
+     register: response
+   - local_action: "copy content='{{ response.status }}' dest=/root/status.txt"  
 
    - name: HTTP 200 status
      find:
@@ -24,7 +27,7 @@
      register: response_200
 
    - debug:
-        msg: HTTP Status Code 200
+        msg: HTTP Status Code is 200 - connection success
       when: response_200.matched > 0
 
    - name: HTTP 404 status
@@ -36,5 +39,5 @@
      register: response_404
   
    - debug:
-        msg: HTTP Status Code 404
+        msg: HTTP Status Code is 404 - connection failed
      when: response_404.matched > 0  
