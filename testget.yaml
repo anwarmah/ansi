@@ -11,7 +11,7 @@
        url: "http://dummy.restapiexample.com/api/v1/employees"
           method: GET
           return_content: yes
-          #status_code: 200
+          status_code: 200
      register: response_code
    - local_action: "copy content='{{ response_code }}' dest=/root/status.txt"  
 
