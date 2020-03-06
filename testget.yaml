@@ -10,8 +10,8 @@
      uri:
        url: https://google.com
           method: GET
-	  return_content: yes
-	  #status_code: 200
+          return_content: yes
+          #status_code: 200
      register: response_code
    - local_action: "copy content='{{ response_code.stdout }}' dest=/root/status.txt"  
 
