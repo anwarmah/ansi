@@ -1,4 +1,0 @@
----
-# vars file for deployment
-vars_files:
-        - 
