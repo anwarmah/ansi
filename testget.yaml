@@ -2,39 +2,39 @@
   connection: local
   gather_facts: no
   vars:
-	pattern1: 200
-	pattern2: 404
+	pattern1: "200"
+	pattern2: "404"
 
   tasks:
    - name: check the status code
      uri:
       url: https://google.com
 	  method: GET
-      return_content: yes
+          return_content: yes
 	  #status_code: 200
      register: response_code
    - local_action: "copy content='{{ response_code.stdout }}' dest=/root/status.txt"  
 
    - name: HTTP 200 status
      find:
-      paths: /root/
-      patterns: '*.txt'
-      file_type: file
-      contains: "{{ pattern1 }}"
+        paths: /root/
+        patterns: '*.txt'
+        file_type: file
+        contains: "{{ pattern1 }}"
      register: response_200
 
    - debug:
-      msg: HTTP Status Code 200
+        msg: HTTP Status Code 200
       when: response_200.matched > 0
 
    - name: HTTP 404 status
      find:
-      paths: /root/
-      patterns: '*.txt'
-      file_type: file
-      contains: "{{ pattern2 }}"
+        paths: /root/
+        patterns: '*.txt'
+        file_type: file
+        contains: "{{ pattern2 }}"
      register: response_404
   
    - debug:
-      msg: HTTP Status Code 404
+        msg: HTTP Status Code 404
      when: response_404.matched > 0  
