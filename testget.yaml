@@ -7,34 +7,34 @@
 
   tasks:
    - name: check the status code
-    uri:
+     uri:
       url: https://google.com
 	  method: GET
       return_content: yes
 	  #status_code: 200
-    register: response_code
+     register: response_code
    - local_action: "copy content='{{ response_code.stdout }}' dest=/root/status.txt"  
 
    - name: HTTP 200 status
-    find:
+     find:
       paths: /root/
       patterns: '*.txt'
       file_type: file
       contains: "{{ pattern1 }}"
-    register: response_200
+     register: response_200
 
    - debug:
       msg: HTTP Status Code 200
-    when: response_200.matched > 0
+      when: response_200.matched > 0
 
    - name: HTTP 404 status
-    find:
+     find:
       paths: /root/
       patterns: '*.txt'
       file_type: file
       contains: "{{ pattern2 }}"
-    register: response_404
+     register: response_404
   
    - debug:
       msg: HTTP Status Code 404
-    when: response_404.matched > 0  
+     when: response_404.matched > 0  
