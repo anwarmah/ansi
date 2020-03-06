@@ -1,25 +1,43 @@
 ---
-#Take the backup of existing tar file
-- name: Backup of the existing tar file
+- name: copy the existing jar file to the backup directory
   copy:
-          src: "{{ direct_path }}/{{ filename }}.jar"
-          dest: "{{ direct_backup_path }}"
-          #  with_items: "{{ jars }}"
-          #  when: item.extension == jar
+         src: "{{ direct_path }}/{{ filename }}"
+         dest: "{{ direct_backup_path }}"
 
-- name: create a zip archive of existing jar file
-  archive:
-          path: "{{ direct_backup_path }}/{{ filename }}.jar"
-          format: zip
-          remove: yes  
+- name: Delete the jar file in the deployment path
+  file:
+         path: "{{ direct_path }}/{{ filename }}"
+         state: absent
 
-# Download the file from artifactory
+# Download the newly uploaded jar file from artifactory to deployment path
 - git:
-        repo: "{{ git_repo }}"
-        dest: "{{ direct_path }}"
-        version: "{{ branch }}"
+         repo: "{{ git_repo }}"
+         dest: "{{ direct_path }}"
+         version: "{{ branch }}"
   tags:
-        - github
+         - github 
+
+- name: Rename the backup jar file
+  command: mv "{{ direct_backup_path }}/{{ filename }}" "{{ direct_backup_path }}/{{ backup_filename }}"           
+
+- name: Archive the backup jar file and delete the original backup jar file
+  archive:
+          path: "{{ direct_backup_path }}/{{ backup_filename }}"
+          format: zip
+          remove: yes
+
+
+- name: Upload the archive backup file to jfrog artifactory
+  shell: curl -u "{{ arti_username }}":"{{ arti_password }}" -T "{{ backup_filename }}.{{ extension }}" "http://{{ arti_server }}/{{ arti_repo }}/{{ backup_filename }}.{{ extension }}"
+  #warn: false
+  args:
+          chdir: "{{ direct_backup_path }}"
+
+- name: Delete the archive backup file on post upload in jfrog
+  file:
+          path: "{{ direct_backup_path }}/{{ backup_filename }}"
+          state: absent  
+             
 #- name: All variables defined in the directory group_vars
 #  include_vars: /root/ansible_rbs/group_vars/
 
@@ -30,4 +48,4 @@
 #                Password: "{{ git_password }}" # Password is a regex
 #      no_log: true    
 
-          #- name: backup the file   
+#- name: backup the file   

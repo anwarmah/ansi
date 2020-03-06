@@ -1,2 +1,25 @@
 ---
 # tasks file for deployment_rollback
+- name: Download the backup from jfrog to local server
+  shell: curl -u "{{ arti_username }}":"{{ arti_password }}" -O "http://{{ arti_server }}/{{ arti_repo }}/{{ backup_filename }}.{{ extension }}"
+  #warn: false
+  args:
+         chdir: "{{ path }}"
+
+- name: unarchive the backup zip file
+  unarchive:
+         src: "{{ path }}/{{ backup_filename }}.{{ extension }}"
+         dest: "{{ direct_backup_path }}"
+
+- name: Rename the backup jar file
+  command: mv "{{ direct_backup_path }}/{{ backup_filename }}" "{{ direct_backup_path }}/{{ filename }}"
+
+- name: Remove the current jar file
+  file:
+         path: "{{ direct_path }}/{{ filename }}"
+         state: absent
+
+- name: Now rollback the old jar file
+  copy:
+         src: "{{ direct_backup_path }}/{{ filename }}"
+         dest: "{{ direct_path }}"

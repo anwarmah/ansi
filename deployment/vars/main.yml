@@ -3,12 +3,16 @@
 #- name: All variables defined in the directory group_vars
 #  include_vars: /root/ansible_rbs/group_vars/ 
 
-jars:
-        - extension: jar
-
-filename: HelloWorld          
 git_repo: git@github.com:anwarmah/deployment.git
+branch: master
+
+arti_server: "13.232.149.122:8081/artifactory"
+arti_repo: example-repo-local
+
+filename: HelloWorld.jar
+backup_filename: HelloWorldv1.jar
+extension: zip
+
 path: /tmp
 direct_path: /tmp/deployment
 direct_backup_path: /tmp/deployment_backup
-branch: master
