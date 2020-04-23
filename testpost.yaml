@@ -28,7 +28,7 @@ vars:
       with_dict: "{{ data }}"
       register: post_content
       
- #   - debug:
+ ##   - debug:
  #       msg: "{{ item.content }}"
  #     with_items: "{{ post_content.results }}"
 
